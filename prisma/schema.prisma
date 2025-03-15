@@ -1,0 +1,32 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider          = "postgresql"
+  url               = env("DATABASE_URL")
+}
+
+model Consultant {
+  id                   Int      @id @default(autoincrement())
+  name                 String
+  email                String   @unique
+  password             String
+  resetToken           String?
+  resetTokenExpiration DateTime?
+  documents            Document[]
+}
+
+model Document {
+  id           Int        @id @default(autoincrement())
+  name         String
+  url          String
+  type         String
+  uploadedAt   DateTime   @default(now())
+  consultantId Int
+  consultant   Consultant @relation(fields: [consultantId], references: [id], onDelete: Cascade)
+
+  text String?   // Campo adicionado para armazenar o texto extraído
+
+  @@index([consultantId])
+}

@@ -1,0 +1,184 @@
+import { NextRequest, NextResponse } from "next/server";
+import multer from "multer";
+import path from "path";
+import { PrismaClient } from "@prisma/client";
+import { writeFile, mkdir } from "fs/promises";
+import { existsSync } from "fs";
+
+const prisma = new PrismaClient();
+
+// Configuração do multer para armazenar arquivos na pasta "uploads"
+const upload = multer({
+  // Armazena em memória antes de salvar
+  storage: multer.memoryStorage(),
+  // Limite de 5MB
+  limits: { fileSize: 5 * 1024 * 1024 },
+  // Validar apenas imagens (jpeg, png, gif)
+  fileFilter: (req, file, cb) => {
+    const filetypes = /jpeg|jpg|png|gif/;
+    const mimetype = filetypes.test(file.mimetype);
+    const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+
+    if (mimetype && extname) {
+      return cb(null, true);
+    }
+    cb(null, false);
+  }
+});
+
+// Middleware para processar o upload do arquivo
+const processUpload = (req: any): Promise<{ file: Express.Multer.File }> => {
+  return new Promise((resolve, reject) => {
+    upload.single("file")(req, {} as any, (err) => {
+      if (err) reject(err);
+      else resolve({ file: req.file });
+    });
+  });
+};
+
+export async function POST(req: NextRequest) {
+  try {
+    const formData = await req.formData();
+    const file = formData.get("file") as File | null;
+    const consultantId = formData.get("consultantId") as string;
+
+    if (!file || !consultantId) {
+      return NextResponse.json({
+        error: "Arquivo e consultantId são obrigatórios",
+      }, { status: 400 });
+    }
+
+    // Verificar se o arquivo é uma imagem
+    if (!file.type.startsWith("image")) {
+      return NextResponse.json({
+        error: "Arquivo deve ser uma imagem (JPEG, PNG ou GIF)",
+      }, { status: 400 });
+    }
+
+    // Criar nome do arquivo único
+    const fileName = `${Date.now()}-${file.name.replace(/\s/g, "_")}`;
+    const uploadDir = path.join(process.cwd(), "public/uploads");
+
+    // Verificar se o diretório existe, caso contrário, criar
+    if (!existsSync(uploadDir)) {
+      await mkdir(uploadDir, { recursive: true });
+    }
+
+    const filePath = path.join(uploadDir, fileName);
+    
+    // Salvar arquivo localmente
+    const buffer = Buffer.from(await file.arrayBuffer());
+    await writeFile(filePath, buffer);
+    
+    // Salvar no banco de dados
+    const document = await prisma.document.create({
+      data: {
+        name: file.name,
+        // Caminho do arquivo salvo
+        url: `/uploads/${fileName}`,
+        type: "image",
+        consultant: { connect: { id: Number(consultantId) } },
+        // Salvar o texto extraído pelo OCR
+      },
+    });
+    console.log(6);
+    return NextResponse.json({ success: true, document }, { status: 201 });
+
+  } catch (error) {
+    console.error("Erro no upload:", error);
+    return NextResponse.json({ error: "Erro interno no servidor" }, { status: 500 });
+  }
+}
+
+
+export async function GET(req: NextRequest, 
+  { params }: { params: { consultantID: string } }
+) {
+  try {
+    const { consultantID } = params;
+    const consultantId = consultantID;
+
+    const url = new URL(req.url);
+    const documentId = url.searchParams.get("documentId");
+
+    if (!consultantId || !documentId) {
+      return NextResponse.json(
+        { error: "consultantId e documentId são obrigatórios" },
+        { status: 400 }
+      );
+    }
+
+    // Buscar o documento específico
+    const document = await prisma.document.findFirst({
+      where: {
+        id: Number(documentId),
+        consultantId: Number(consultantId),
+      },
+    });
+
+    if (!document) {
+      return NextResponse.json({
+        error: "Documento não encontrado",
+      }, { status: 404 });
+    }
+
+    return NextResponse.json({
+      success: true, document
+    }, { status: 200 });
+  } catch (error) {
+    console.error("Erro ao buscar documento:", error);
+    return NextResponse.json({
+      error: "Erro interno no servidor"
+    }, { status: 500 });
+  }
+}
+
+export async function DELETE(req: NextRequest, 
+  { params }: { params: { consultantID: string } }
+) {
+  try {
+    const { consultantID } = params;
+    const consultantId = Number(consultantID);
+
+    const url = new URL(req.url);
+    const documentId = Number(url.searchParams.get("documentId"));
+
+    if (!consultantId || !documentId) {
+      return NextResponse.json(
+        { error: "consultantId e documentId são obrigatórios" },
+        { status: 400 }
+      );
+    }
+
+    // Buscar o documento específico
+    const document = await prisma.document.findFirst({
+      where: {
+        id: documentId,
+        consultantId: consultantId,
+      },
+    });
+
+    if (!document) {
+      return NextResponse.json(
+        { error: "Documento não encontrado ou não pertence ao consultor" },
+        { status: 404 }
+      );
+    }
+
+    // Deletar o documento
+    await prisma.document.delete({
+      where: { id: documentId },
+    });
+
+    return NextResponse.json(
+      { success: true, message: "Documento deletado com sucesso" },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("Erro ao deletar documento:", error);
+    return NextResponse.json(
+      { error: "Erro interno no servidor" },
+      { status: 500 }
+    );
+  }
+}
