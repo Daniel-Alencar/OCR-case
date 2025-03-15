@@ -15,6 +15,7 @@ interface Document {
   id: number;
   name: string;
   url: string;
+  text: string;
 }
 
 function DocumentsConsultant() {

@@ -182,3 +182,42 @@ export async function DELETE(req: NextRequest,
     );
   }
 }
+
+export async function PUT(req: NextRequest,
+  { params }: { params: { consultantID: string } }
+) {
+  try {
+    const { consultantID } = params;
+
+    const url = new URL(req.url);
+    const documentId = Number(url.searchParams.get("documentId"));
+    const { text } = await req.json();  
+
+    // Verificando se os dados necessários estão presentes
+    if (!consultantID || !documentId || !text) {
+      return NextResponse.json(
+        { error: 'Dados insuficientes para realizar a atualização' },
+        { status: 400 }
+      );
+    }
+
+    // Atualizando o documento no banco de dados
+    const updatedDocument = await prisma.document.update({
+      where: {
+        id: documentId,
+      },
+      data: {
+        text, // Atualizando o campo "text"
+      },
+    });
+
+    // Retornando o documento atualizado
+    return NextResponse.json({ success: true, document: updatedDocument });
+  } catch (error) {
+    console.error('Erro ao atualizar o documento:', error);
+    return NextResponse.json(
+      { error: 'Erro ao atualizar o documento' },
+      { status: 500 }
+    );
+  }
+}

@@ -5,6 +5,7 @@ import { useState } from 'react';
 // Definindo os tipos de mensagem
 import { Message } from '../../../types'; 
 import SubHeader from '@/components/SubHeader';
+import Header from '@/components/Header';
 
 const ChatPage = () => {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -48,6 +49,7 @@ const ChatPage = () => {
 
   return (
     <>
+      <Header title='Descrição do documento'/>
       <SubHeader />
       <div className="flex flex-col bg-gray-100 p-4">
         <div className="flex flex-col flex-grow overflow-y-auto p-4 bg-white rounded-lg shadow-lg space-y-4">

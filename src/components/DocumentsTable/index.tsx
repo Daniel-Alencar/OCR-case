@@ -6,6 +6,8 @@ import Tesseract from 'tesseract.js';
 interface Document {
   id: number;
   name: string;
+  url: string;
+  text: string;
 }
 
 interface TableProps {
@@ -80,6 +82,34 @@ const TableDocuments: React.FC<TableProps> = ({ documents }) => {
     }
   };
 
+  const updateDocumentOCR = async (documentId: number, text: string) => {
+    try {
+      if (decoded) {
+        // Fazendo o fetch da URL do documento a partir da API
+        const response = await fetch(
+          `/api/consultants/${decoded.id}/document?documentId=${documentId}`,
+          {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ text }),  // Enviando o texto como parte do corpo da requisição
+          }
+        );
+  
+        if (!response.ok) {
+          throw new Error('Erro na atualização do texto da imagem');
+        }
+  
+        const data = await response.json(); // Para capturar a resposta, se necessário
+        console.log(data);
+      }
+    } catch (error) {
+      console.error('Erro na atualização do texto da imagem:', error);
+    }
+  };
+  
+
   const handleOCR = async (documentId: number) => {
     try {
       if(decoded) {
@@ -97,20 +127,21 @@ const TableDocuments: React.FC<TableProps> = ({ documents }) => {
         if (data.success && data.document.url) {
           const imageURL = data.document.url;
 
-          // Baixando a imagem e convertendo para um formato que o Tesseract.js possa processar
+          // Baixando a imagem e convertendo para um formato do Tesseract.js
           const imageResponse = await fetch(imageURL);
           const imageBlob = await imageResponse.blob();
 
           // Passando o blob para o Tesseract.js
           const result = await Tesseract.recognize(
             imageBlob,  // Aqui usamos o Blob da imagem
-            'eng', // Idioma do OCR
+            'por',      // Idioma do OCR
             {
               logger: (m) => console.log(m), // Logs de progresso
             }
           );
 
           console.log("Texto extraído:", result.data.text);
+          await updateDocumentOCR(documentId, result.data.text);
         }
       }
     } catch (error) {
@@ -161,7 +192,7 @@ const TableDocuments: React.FC<TableProps> = ({ documents }) => {
               </td>
               <td className="border border-gray-300 px-4 py-2">
                 {
-                  true
+                  document.text != null
                   ? 
                     <Link href={`/Documents/${document.id}/Chat`}>
                       <p className="cursor-pointer text-blue-600 hover:underline">
