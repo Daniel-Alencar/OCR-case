@@ -1,25 +1,64 @@
 'use client'
 
-import { useState } from 'react';
-
-// Definindo os tipos de mensagem
+import { useState, useEffect } from 'react';
 import { Message } from '../../../types'; 
 import SubHeader from '@/components/SubHeader';
 import Header from '@/components/Header';
+import { useParams } from 'next/navigation';
+import { getTokenPayload } from '@/lib/auth';
 
 const ChatPage = () => {
+  const params = useParams();
+  const decoded = getTokenPayload();
+  const documentID = params.documentID;
+
   const [messages, setMessages] = useState<Message[]>([]);
+  const [initialMessage, setInitialMessage] = useState<Message | null>(null);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const sendMessage = async () => {
-    if (input.trim() === '') return;
+  const getOCRTranscrition = async (documentId: number) => {
+    if (decoded) {
+      try {
+        const response = await fetch(
+          `/api/consultants/${decoded.id}/document?documentId=${documentId}`,
+          { method: 'GET' }
+        );
 
-    const newMessage = { role: 'user', content: input };
-    const updatedMessages = [...messages, newMessage];
+        if (!response.ok) throw new Error("Erro ao buscar a transcrição");
 
-    setMessages(updatedMessages);
-    setInput('');
+        const data = await response.json();
+
+        if (data.success) {
+          const newInitialMessage: Message = {
+            role: 'assistant',
+            content: "(Descrição da imagem): " + data.document.text,
+          };
+
+          setInitialMessage(newInitialMessage);
+          setMessages([newInitialMessage]);
+        }
+      } catch (err) {
+        alert("Erro ao buscar a transcrição.");
+      }
+    }
+  };
+
+  useEffect(() => {
+    getOCRTranscrition(parseInt(documentID)).then(() => {
+      if (initialMessage) sendMessage('', true); // Envia a mensagem inicial apenas se ela foi definida
+    });
+  }, []);
+
+  const sendMessage = async (text: string, isInitial = false) => {
+    if (isInitial && initialMessage) {
+      setMessages([initialMessage]); // Garante que a mensagem inicial seja enviada
+    } else {
+      const newMessage = { role: 'user', content: text };
+      setMessages((prev) => [...prev, newMessage]);
+    }
+
+    if (!isInitial) setInput('');
     setLoading(true);
 
     try {
@@ -28,15 +67,13 @@ const ChatPage = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ messages: updatedMessages }),
+        body: JSON.stringify({ messages }),
       });
 
       const data = await response.json();
 
       if (data.message) {
-        setMessages([...updatedMessages, 
-          { role: 'assistant', content: data.message.content }
-        ]);
+        setMessages((prev) => [...prev, { role: 'assistant', content: data.message.content }]);
       } else {
         console.error('Erro:', data.error);
       }
@@ -49,7 +86,7 @@ const ChatPage = () => {
 
   return (
     <>
-      <Header title='Descrição do documento'/>
+      <Header title="Descrição do documento" />
       <SubHeader />
       <div className="flex flex-col bg-gray-100 p-4">
         <div className="flex flex-col flex-grow overflow-y-auto p-4 bg-white rounded-lg shadow-lg space-y-4">
@@ -60,9 +97,7 @@ const ChatPage = () => {
             </div>
           ))}
 
-          {loading && (
-            <div className="text-gray-500 p-2">Assistente digitando...</div>
-          )}
+          {loading && <div className="text-gray-500 p-2">Assistente digitando...</div>}
         </div>
 
         <div className="flex space-x-2 mt-4">
@@ -74,7 +109,7 @@ const ChatPage = () => {
             onChange={(e) => setInput(e.target.value)}
           />
           <button
-            onClick={sendMessage}
+            onClick={() => sendMessage(input)}
             className="bg-blue-500 text-white px-4 py-2 rounded-lg disabled:bg-gray-400"
             disabled={loading}
           >

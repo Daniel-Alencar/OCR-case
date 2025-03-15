@@ -73,8 +73,6 @@ const TableDocuments: React.FC<TableProps> = ({ documents }) => {
         if (data.success) {
           console.log("Documento apagado com sucesso!");
           alert("Documento apagado com sucesso!");
-
-
         }
       } catch (err) {
         alert("Erro ao deletar o documento.");
