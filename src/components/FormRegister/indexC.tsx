@@ -44,13 +44,13 @@ function FormRegister() {
 
   return (
     <form
-      className="container bg-background rounded-custom-1 p-7 w-full flex flex-col gap-4"
+      className="container bg-background rounded-custom-1 p-7 w-1/3 flex flex-col gap-4"
       onSubmit={(event) => submitForms(event)}
     >
-      <h4 className="font-bold text-primary mb-5">Novo Consultor</h4>
+      <h4 className="font-bold text-primary mb-5">Novo Usuário</h4>
 
-      <div className="flex px-8 ">
-        <div className="px-8 flex-1 grid grid-cols-2 gap-4 ">
+      <div className="flex">
+        <div className="w-full grid grid-cols-1 gap-1 ">
           <TextInput
             label={'Nome'}
             placeholder={'Digite seu nome'}
@@ -77,7 +77,7 @@ function FormRegister() {
       <div>
         <button
           type="submit"
-          className="bg-gradient-to-r from-button-linear-1 to-button-linear-2 text-white font-thin text-xs py-3 px-12 rounded-lg w-2/6"
+          className="bg-gradient-to-r from-button-linear-1 to-button-linear-2 text-white font-thin text-xs py-3 rounded-lg w-2/6"
         >
           Cadastrar
         </button>

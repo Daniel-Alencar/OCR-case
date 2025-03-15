@@ -65,7 +65,7 @@ export default function UploadDocument() {
         {/* Input escondido */}
         <input 
           type="file" 
-          accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.jpg,.png" 
+          accept=".jpg,.png,.jpeg,.gif"
           onChange={handleFileChange} 
           id="fileInput"
           className="hidden"

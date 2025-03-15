@@ -66,7 +66,6 @@ function Header({ mode = true, title = '' }: HeaderProps) {
     <>
       <div className="flex flex-row justify-between pb-6">
         <div className="flex gap-2 font-extrabold">
-          <Image src={staffIcon} alt="Staff Icon" />
           <p>{title}</p>
         </div>
 

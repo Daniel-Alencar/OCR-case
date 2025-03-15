@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { useState } from 'react';
 
-import logo from '../../public/assets/coep.png';
+import logo from '../../public/assets/logo.png';
 import dashboard from '../../public/assets/NavigationBar/Dashboard.svg';
 import maintenance from '../../public/assets/NavigationBar/Maintenance.svg';
 import staff from '../../public/assets/NavigationBar/Staff.svg';
@@ -58,7 +58,7 @@ function NavigationBar() {
       "
     >
       <div className="p-4">
-        <Image src={logo} alt="logo" className="w-32 mx-auto" />
+        <Image src={logo} alt="logo" className="w-20 mx-auto" />
       </div>
 
       <div className="flex flex-col flex-1 gap-0">
@@ -78,7 +78,7 @@ function NavigationBar() {
       </div>
 
       <div className="p-4">
-        <p className="text-sm text-center text-foreground">© 2025 Case OCR</p>
+        <p className="text-sm text-center text-foreground">© 2025 OCR + LLM</p>
       </div>
     </div>
   );

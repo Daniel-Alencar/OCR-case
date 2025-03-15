@@ -82,10 +82,6 @@ function Header() {
 
   return (
     <div className="flex justify-end items-center gap-4 pb-6 bg-primary p-2">
-      <BellAlertIcon
-        className="h-6 w-6 cursor-pointer text-white"
-        onClick={handleNotification}
-      />
       <ArrowLeftOnRectangleIcon
         className="h-6 w-6 cursor-pointer text-white"
         onClick={handleLogout}

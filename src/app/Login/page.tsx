@@ -8,9 +8,6 @@ export default function Login() {
   return (
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-4 lg:px-8">
-        <div className="flex justify-center ">
-          <Image alt="coep" src={Logo} width={250} height={250} />
-        </div>
 
         <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-sm">
           <form action="#" method="POST" className="space-y-6">

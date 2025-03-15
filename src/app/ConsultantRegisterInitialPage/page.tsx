@@ -1,12 +1,14 @@
 import FormRegister from '@/components/FormRegister/indexC';
-import Home from '@/components/Header/indexC';
 import SubHeader from '@/components/SubHeader';
 
 function ConsultantRegisterInitialPage() {
   return (
     <>
+      <div className='h-6'></div>
       <SubHeader />
-      <FormRegister />
+      <div className='flex flex-col justify-center items-center'>
+        <FormRegister />
+      </div>
     </>
   );
 }
