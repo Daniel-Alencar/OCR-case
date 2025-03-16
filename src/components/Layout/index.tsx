@@ -1,8 +1,7 @@
 import NavigationBar from '../NavigationBar';
 
-// Definindo o tipo de 'children' como 'React.ReactNode'
 interface LayoutProps {
-  children: React.ReactNode; // Tipo adequado para 'children'
+  children: React.ReactNode;
 }
 
 export default function Layout({ children }: LayoutProps) {

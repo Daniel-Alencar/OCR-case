@@ -1,6 +1,6 @@
 import { getTokenPayload } from "@/lib/auth";
 import Link from "next/link";
-import React, { useEffect } from "react";
+import React from "react";
 import Tesseract from 'tesseract.js';
 
 interface Document {
@@ -15,7 +15,6 @@ interface TableProps {
 }
 
 const TableDocuments: React.FC<TableProps> = ({ documents }) => {
-
   const decoded = getTokenPayload();
 
   const handleDownload = async (documentId: number) => {
@@ -82,7 +81,6 @@ const TableDocuments: React.FC<TableProps> = ({ documents }) => {
   const updateDocumentOCR = async (documentId: number, text: string) => {
     try {
       if (decoded) {
-        // Fazendo o fetch da URL do documento a partir da API
         const response = await fetch(
           `/api/consultants/${decoded.id}/document?documentId=${documentId}`,
           {
@@ -90,15 +88,13 @@ const TableDocuments: React.FC<TableProps> = ({ documents }) => {
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ text }),  // Enviando o texto como parte do corpo da requisição
+            body: JSON.stringify({ text }),
           }
         );
   
         if (!response.ok) {
           throw new Error('Erro na atualização do texto da imagem');
         }
-  
-        const data = await response.json(); // Para capturar a resposta, se necessário
       }
     } catch (error) {
       console.error('Erro na atualização do texto da imagem:', error);
@@ -109,7 +105,6 @@ const TableDocuments: React.FC<TableProps> = ({ documents }) => {
   const handleOCR = async (documentId: number) => {
     try {
       if(decoded) {
-        // Fazendo o fetch da URL do documento a partir da API
         const response = await fetch(
           `/api/consultants/${decoded.id}/document?documentId=${documentId}`
         );
@@ -129,11 +124,11 @@ const TableDocuments: React.FC<TableProps> = ({ documents }) => {
 
           // Passando o blob para o Tesseract.js
           const result = await Tesseract.recognize(
-            imageBlob,  // Aqui usamos o Blob da imagem
-            'por',      // Idioma do OCR
+            imageBlob,
+            'por',
           );
 
-          alert("OCR capturado da imagem!");
+          alert("OCR da imagem capturado!");
           await updateDocumentOCR(documentId, result.data.text);
         }
       }
@@ -189,7 +184,7 @@ const TableDocuments: React.FC<TableProps> = ({ documents }) => {
                   ? 
                     <Link href={`/Documents/${document.id}/Chat`}>
                       <p className="cursor-pointer text-blue-600 hover:underline">
-                        Explicar documento
+                        Explicar descrição da imagem
                       </p>
                     </Link>
                   : <a 

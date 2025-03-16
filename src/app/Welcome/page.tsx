@@ -9,7 +9,6 @@ function Welcome() {
           <div className="grid md:grid-cols-1 grid-cols-1 items-center gap-10 md:px-10">
             <div>
               <h1 className="mb-2 text-3xl font-bold text-primary">
-                {' '}
                 Bem-vindo(a) a <span className="text-green-700">OCR + LLM</span>
               </h1>
               <p className="mb-6 text-primary">

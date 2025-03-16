@@ -8,7 +8,6 @@ export async function GET(
 ) {
   
   try {
-    // ID do Consultant obtido da URL
     const { consultantID } = params; 
 
     if (!consultantID) {

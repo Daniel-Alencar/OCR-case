@@ -11,7 +11,6 @@ export default function LoginButton() {
     setLoading(true);
     setError('');
 
-    // Tipagem explícita para evitar o erro
     const emailInput = document.getElementById(
       'email'
     ) as HTMLInputElement | null;
@@ -39,13 +38,12 @@ export default function LoginButton() {
       const data = await response.json();
 
       if (response.ok) {
-        // Armazena o token no localStorage ou cookie
         if (typeof window !== 'undefined') {
-          // Acesse o localStorage aqui
+          // Coloca token no localStorage
           localStorage.setItem('token', data.token);
         }
 
-        // Redireciona para o dashboard ou outra página
+        // Redireciona para a pagina inicial
         router.push('/About');
       } else {
         setError(data.error || 'Erro ao fazer login. Tente novamente.');

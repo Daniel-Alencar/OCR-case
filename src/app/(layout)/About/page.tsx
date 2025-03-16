@@ -6,7 +6,6 @@ import Header from '@/components/Header/indexAbout';
 export default function About() {
   useAuth();
 
-
   return (
     <div className="relative h-full">
       <div className="absolute top-0 flex flex-col">

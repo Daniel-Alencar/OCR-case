@@ -33,3 +33,7 @@ Abra [http://localhost:3000](http://localhost:3000) com o seu navegador para ver
 ## Deploy
 
 O deploy do projeto foi feito pelo Vercel e está disponível no link [https://ocr-case.vercel.app/](https://ocr-case.vercel.app/)
+
+## Observações
+
+Às vezes é necessário recarregar a página para que as atualizações sejam exibidas na página.

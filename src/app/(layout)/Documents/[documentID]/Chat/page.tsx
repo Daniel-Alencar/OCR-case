@@ -49,14 +49,14 @@ const ChatPage = () => {
       getOCRTranscrition(parseInt(documentID)).then(() => {
         // Envia a mensagem inicial apenas se ela foi definida
         if (initialMessage) sendMessage('', true);
-
       });
     }
   }, []);
 
   const sendMessage = async (text: string, isInitial = false) => {
     if (isInitial && initialMessage) {
-      setMessages([initialMessage]); // Garante que a mensagem inicial seja enviada
+      // Garante que a mensagem inicial com o OCR seja enviada
+      setMessages([initialMessage]);
     } else {
       const newMessage = { role: 'user', content: text };
       setMessages((prev) => [...prev, newMessage]);
@@ -77,7 +77,12 @@ const ChatPage = () => {
       const data = await response.json();
 
       if (data.message) {
-        setMessages((prev) => [...prev, { role: 'assistant', content: data.message.content }]);
+        setMessages(
+          (prev) => [
+            ...prev, 
+            { role: 'assistant', content: data.message.content }
+          ]
+        );
       } else {
         console.error('Erro:', data.error);
       }
@@ -93,15 +98,36 @@ const ChatPage = () => {
       <Header title="Descrição do documento" />
       <SubHeader />
       <div className="flex flex-col bg-gray-100 p-4">
-        <div className="flex flex-col flex-grow overflow-y-auto p-4 bg-white rounded-lg shadow-lg space-y-4">
+        <div 
+          className="
+            flex flex-col flex-grow overflow-y-auto p-4 
+            bg-white rounded-lg shadow-lg space-y-4
+          "
+        >
           {messages.map((msg, index) => (
-            <div key={index} className={`p-2 rounded-lg ${msg.role === 'user' ? 'bg-blue-100' : 'bg-gray-100'}`}>
-              <div className="font-semibold">{msg.role === 'user' ? 'Você' : 'Assistente'}</div>
+            <div 
+              key={index} 
+              className={
+                `p-2 rounded-lg ${
+                  msg.role === 'user' ? 'bg-blue-100' : 'bg-gray-100'
+                }`
+              }
+            >
+              <div 
+                className="font-semibold"
+              >
+                {msg.role === 'user' ? 'Você' : 'Assistente'}
+              </div>
               <div>{msg.content}</div>
             </div>
           ))}
 
-          {loading && <div className="text-gray-500 p-2">Assistente digitando...</div>}
+          {
+            loading && 
+            <div className="text-gray-500 p-2">
+              Assistente digitando...
+            </div>
+          }
         </div>
 
         <div className="flex space-x-2 mt-4">
@@ -114,7 +140,10 @@ const ChatPage = () => {
           />
           <button
             onClick={() => sendMessage(input)}
-            className="bg-blue-500 text-white px-4 py-2 rounded-lg disabled:bg-gray-400"
+            className="
+              bg-blue-500 text-white px-4 py-2 
+              rounded-lg disabled:bg-gray-400
+            "
             disabled={loading}
           >
             Enviar

@@ -1,10 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { StaticImageData } from 'next/image';
-import { getTokenPayload } from '@/lib/auth';
-
-import useAuth from '@/hooks/useAuth';
-import { useState } from 'react';
 
 interface NavigationBarItemProps {
   image: string | StaticImageData;
@@ -28,12 +24,16 @@ function NavigationBarItem({
     <Link href={href}>
       <div className="relative m-0 cursor-pointer" onClick={onSelect}>
         <div
-          className={`flex items-center space-x-2 pl-6 pr-6 pt-2 pb-2 hover:bg-hover-1 
-            ${isSelected ? 'bg-hover-1' : ''}`}
+          className={`
+            flex items-center space-x-2 pl-6 pr-6 pt-2 pb-2 hover:bg-hover-1 
+            ${isSelected ? 'bg-hover-1' : ''}
+          `}
         >
           <div
-            className={`absolute left-0 h-full w-1 rounded-br-md rounded-tr-md 
-            ${isSelected && 'bg-[#8D0A75]'}`}
+            className={`
+              absolute left-0 h-full w-1 rounded-br-md rounded-tr-md 
+              ${isSelected && 'bg-[#8D0A75]'}
+            `}
           ></div>
           <Image
             src={image}

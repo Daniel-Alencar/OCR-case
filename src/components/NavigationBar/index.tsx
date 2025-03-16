@@ -5,16 +5,9 @@ import { useState } from 'react';
 
 import logo from '../../public/assets/logo.png';
 import dashboard from '../../public/assets/NavigationBar/Dashboard.svg';
-import maintenance from '../../public/assets/NavigationBar/Maintenance.svg';
-import staff from '../../public/assets/NavigationBar/Staff.svg';
 import docs from '../../public/assets/NavigationBar/Docs.svg';
-import tasks from '../../public/assets/NavigationBar/Tasks.svg';
-import register from '../../public/assets/NavigationBar/Register.svg';
-import privacy from '../../public/assets/NavigationBar/Privacy.svg';
-import partners from '../../public/assets/NavigationBar/Partners.svg';
 
 import NavigationBarItem from '../NavigationBarItem';
-import { getTokenPayload } from '@/lib/auth';
 
 import useAuth from '@/hooks/useAuth';
 
@@ -24,23 +17,19 @@ const pagesInformations = [
     image: dashboard,
     alt: 'Início',
     description: 'Início',
-    name: 'inicio',
+    name: 'Inicio',
   },
   {
     href: '/Documents',
     image: docs,
-    alt: 'Documentos',
-    description: 'Documentos',
-    name: 'documentos',
+    alt: 'Imagens',
+    description: 'Imagens',
+    name: 'Imagens',
   }
 ];
 
 function NavigationBar() {
   useAuth();
-
-  const decoded = getTokenPayload();
-  const userId = decoded?.id ? decoded.id : null;
-  const userType = decoded?.userType ? decoded.userType : null;
 
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
 

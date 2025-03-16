@@ -3,7 +3,6 @@
 import UploadDocument from "@/components/UploadDocument";
 import { AiOutlineClose } from "react-icons/ai";
 
-
 interface PopUpProps {
   title: string;
   ref: any;
@@ -41,5 +40,4 @@ export default function DocumentPopUp({
       </div>
     </div>
   );
-  
 }

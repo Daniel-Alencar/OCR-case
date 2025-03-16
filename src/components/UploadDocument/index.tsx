@@ -62,7 +62,6 @@ export default function UploadDocument() {
         bg-white flex flex-col items-center
         "
       >
-        {/* Input escondido */}
         <input 
           type="file" 
           accept=".jpg,.png,.jpeg,.gif"
@@ -80,8 +79,6 @@ export default function UploadDocument() {
           />
         </label>
 
-
-        {/* Mensagem de status */}
         {message && <p className="mt-2 text-sm text-gray-700">{message}</p>}
       </div>
       <button

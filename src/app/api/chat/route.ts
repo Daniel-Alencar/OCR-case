@@ -11,7 +11,7 @@ export async function POST(req: Request) {
   try {
     const completion = await openai.chat.completions.create({
       model: 'gpt-3.5-turbo',
-      messages: messages, // Já inclui a mensagem inicial
+      messages: messages,
     });
 
     return NextResponse.json({ message: completion.choices[0].message });

@@ -9,11 +9,9 @@ const prisma = new PrismaClient();
 
 // Configuração do multer para armazenar arquivos na pasta "uploads"
 const upload = multer({
-  // Armazena em memória antes de salvar
   storage: multer.memoryStorage(),
   // Limite de 5MB
   limits: { fileSize: 5 * 1024 * 1024 },
-  // Validar apenas imagens (jpeg, png, gif)
   fileFilter: (req, file, cb) => {
     const filetypes = /jpeg|jpg|png|gif/;
     const mimetype = filetypes.test(file.mimetype);
@@ -25,16 +23,6 @@ const upload = multer({
     cb(null, false);
   }
 });
-
-// Middleware para processar o upload do arquivo
-const processUpload = (req: any): Promise<{ file: Express.Multer.File }> => {
-  return new Promise((resolve, reject) => {
-    upload.single("file")(req, {} as any, (err) => {
-      if (err) reject(err);
-      else resolve({ file: req.file });
-    });
-  });
-};
 
 export async function POST(req: NextRequest) {
   try {
@@ -77,8 +65,7 @@ export async function POST(req: NextRequest) {
         // Caminho do arquivo salvo
         url: `/uploads/${fileName}`,
         type: "image",
-        consultant: { connect: { id: Number(consultantId) } },
-        // Salvar o texto extraído pelo OCR
+        consultant: { connect: { id: Number(consultantId) } }
       },
     });
     return NextResponse.json({ success: true, document }, { status: 201 });
@@ -159,7 +146,7 @@ export async function DELETE(req: NextRequest,
 
     if (!document) {
       return NextResponse.json(
-        { error: "Documento não encontrado ou não pertence ao consultor" },
+        { error: "Documento não encontrado ou não pertence ao usuário" },
         { status: 404 }
       );
     }
@@ -206,7 +193,7 @@ export async function PUT(req: NextRequest,
         id: documentId,
       },
       data: {
-        text, // Atualizando o campo "text"
+        text,
       },
     });
 

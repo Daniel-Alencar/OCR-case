@@ -5,29 +5,21 @@ import bcrypt from 'bcrypt';
 
 const prisma = new PrismaClient();
 
-// Tipagem para o corpo da requisição
 interface ConsultantRequestBody {
   name: string;
   email: string;
   password: string;
 }
 
-// Função para criar um consultor com senha em hash
+// Função para criar um usuário com senha em hash
 const createConsultant = async (
   name: string,
   email: string,
   password: string,
 ) => {
-  // Gerar um hash da senha (10 é o número de rounds de salting)
   const hashedPassword = await bcrypt.hash(password, 10);
 
-  const data = {
-    name,
-    email,
-    password,
-  };
-
-  // Criar o consultor com a senha em hash
+  // Criar o usuário com a senha em hash
   const consultant = await prisma.consultant.create({
     data: {
       name,
@@ -61,15 +53,15 @@ export async function POST(req: Request) {
   }
 
   try {
-    // Verificar se o email já existe
+    // Verifica se o email já existe
     const existingConsultant = await prisma.consultant.findUnique({
       where: { email },
     });
     if (existingConsultant) {
-      return NextResponse.json({ error: 'Email em uso' }, { status: 409 });
+      return NextResponse.json({ error: 'Email já usado!' }, { status: 409 });
     }
 
-    // Criar consultor
+    // Cria usuário
     const consultant = await createConsultant(
       name,
       email,
@@ -88,7 +80,7 @@ export async function POST(req: Request) {
     console.error(error);
     return NextResponse.json(
       {
-        error: 'An error occurred while creating the consultant',
+        error: 'Ocorreu um erro ao criar o usuário',
       },
       { status: 500 }
     );

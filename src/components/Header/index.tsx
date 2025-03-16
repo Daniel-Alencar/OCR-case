@@ -1,13 +1,10 @@
 'use client';
 
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import staffIcon from '../../public/assets/Header/Staff.svg';
 import { 
-  ArrowLeftOnRectangleIcon,
-  BellAlertIcon
+  ArrowLeftOnRectangleIcon
 } from '@heroicons/react/24/outline';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { getTokenPayload } from '@/lib/auth';
 
 interface HeaderProps {
@@ -19,17 +16,7 @@ function Header({ mode = true, title = '' }: HeaderProps) {
   const router = useRouter();
   const decoded = getTokenPayload();
 
-  const userType = decoded?.userType;
-  const userId = decoded?.id;
-  const name = decoded?.name;
-
-  const [showNotifications, setShowNotifications] = useState(false);
   const [username, setUsername] = useState<string>("");
-  const [notifications, setNotifications] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  const popupRef = useRef<HTMLDivElement | null>(null);
 
   const handleLogout = () => {
     if (typeof window !== 'undefined') {
@@ -43,23 +30,6 @@ function Header({ mode = true, title = '' }: HeaderProps) {
       setUsername(decoded.name);
     }
   }, []);
-
-  // Fecha o popup ao clicar fora
-  useEffect(() => {
-
-    function handleClickOutside(event: MouseEvent) {
-      if (popupRef.current && !popupRef.current.contains(event.target as Node)) {
-        setShowNotifications(false);
-      }
-    }
-
-    if (showNotifications) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [showNotifications]);
 
   return (
     <>

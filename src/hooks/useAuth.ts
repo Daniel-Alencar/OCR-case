@@ -15,8 +15,6 @@ const useAuth = () => {
     if (!token) {
       // Redireciona se o token não existir
       router.push("/Login");
-    } else {
-      
     }
   }, [router]);
 };

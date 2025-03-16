@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import TextInput from './TextInput';
 
 function FormRegister() {
@@ -31,12 +31,12 @@ function FormRegister() {
 
       if (!response.ok) {
         const errorData = await response.json();
-        alert(`Erro ao cadastrar consultor: ${errorData.error}`);
+        alert(`Erro ao cadastrar usuário: ${errorData.error}`);
         return;
       }
 
       const result = await response.json();
-      alert(`Consultor cadastrado com sucesso! ID: ${result.id}`);
+      alert(`Usuário cadastrado com sucesso! ID: ${result.id}`);
     } catch (error) {
       alert('Erro inesperado. Tente novamente mais tarde.');
     }
@@ -44,7 +44,10 @@ function FormRegister() {
 
   return (
     <form
-      className="container bg-background rounded-custom-1 p-7 w-1/3 flex flex-col gap-4"
+      className="
+        container bg-background rounded-custom-1 
+        p-7 w-1/3 flex flex-col gap-4
+      "
       onSubmit={(event) => submitForms(event)}
     >
       <h4 className="font-bold text-primary mb-5">Novo Usuário</h4>
@@ -77,7 +80,10 @@ function FormRegister() {
       <div>
         <button
           type="submit"
-          className="bg-gradient-to-r from-button-linear-1 to-button-linear-2 text-white font-thin text-xs py-3 rounded-lg w-2/6"
+          className="
+            bg-gradient-to-r from-button-linear-1 to-button-linear-2 
+            text-white font-thin text-xs py-3 rounded-lg w-2/6
+          "
         >
           Cadastrar
         </button>

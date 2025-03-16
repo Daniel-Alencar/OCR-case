@@ -1,7 +1,6 @@
 'use client';
 import React from 'react';
 
-// Definindo a interface para as props
 interface TextInputProps {
   label: string;
   placeholder: string;

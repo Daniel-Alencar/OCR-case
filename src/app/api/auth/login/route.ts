@@ -22,7 +22,7 @@ export async function POST(req: Request) {
 
     if(!user) {
       return NextResponse.json(
-        { error: 'An error occurred during login' },
+        { error: 'Informações de autenticação incorretas!' },
         { status: 500 }
       );
     }
@@ -51,7 +51,7 @@ export async function POST(req: Request) {
   } catch (error) {
     console.error(error);
     return NextResponse.json(
-      { error: 'An error occurred during login' },
+      { error: 'Informações de autenticação incorretas!' },
       { status: 500 }
     );
   }

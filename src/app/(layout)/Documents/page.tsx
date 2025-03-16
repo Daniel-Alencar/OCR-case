@@ -58,10 +58,8 @@ function Documents() {
     }
   }, []);
 
-  // Filtro de produtores
   useEffect(() => {
 
-    // Mudanças causadas pelo filterText
     const filteredDocuments = documents.filter(document => {
       return document.name.toLowerCase()
         .includes(filterText.toLowerCase());
@@ -72,7 +70,7 @@ function Documents() {
 
   return (
     <>
-      <Header title={'Documentos'} />
+      <Header title={'Imagens'} />
       <SubHeader />
       <FilterDocuments 
         documents={filteredDocuments}
