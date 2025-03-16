@@ -45,11 +45,13 @@ const ChatPage = () => {
   };
 
   useEffect(() => {
-    getOCRTranscrition(parseInt(documentID)).then(() => {
-      // Envia a mensagem inicial apenas se ela foi definida
-      if (initialMessage) sendMessage('', true);
+    if(typeof documentID == 'string') {
+      getOCRTranscrition(parseInt(documentID)).then(() => {
+        // Envia a mensagem inicial apenas se ela foi definida
+        if (initialMessage) sendMessage('', true);
 
-    });
+      });
+    }
   }, []);
 
   const sendMessage = async (text: string, isInitial = false) => {
