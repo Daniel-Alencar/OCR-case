@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import Search from '../../public/assets/Produtors/Search.svg';
+import Search from '../../public/assets/Search.svg';
 import { useEffect, useState } from 'react';
 import DocumentPopUp from '@/components/DocumentPopUp';
 

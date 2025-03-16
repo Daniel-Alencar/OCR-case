@@ -81,7 +81,6 @@ export async function POST(req: NextRequest) {
         // Salvar o texto extraído pelo OCR
       },
     });
-    console.log(6);
     return NextResponse.json({ success: true, document }, { status: 201 });
 
   } catch (error) {

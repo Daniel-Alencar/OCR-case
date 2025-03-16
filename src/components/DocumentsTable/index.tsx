@@ -1,6 +1,6 @@
 import { getTokenPayload } from "@/lib/auth";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect } from "react";
 import Tesseract from 'tesseract.js';
 
 interface Document {
@@ -71,7 +71,6 @@ const TableDocuments: React.FC<TableProps> = ({ documents }) => {
         const data = await response.json();
 
         if (data.success) {
-          console.log("Documento apagado com sucesso!");
           alert("Documento apagado com sucesso!");
         }
       } catch (err) {
@@ -100,7 +99,6 @@ const TableDocuments: React.FC<TableProps> = ({ documents }) => {
         }
   
         const data = await response.json(); // Para capturar a resposta, se necessário
-        console.log(data);
       }
     } catch (error) {
       console.error('Erro na atualização do texto da imagem:', error);
@@ -133,12 +131,9 @@ const TableDocuments: React.FC<TableProps> = ({ documents }) => {
           const result = await Tesseract.recognize(
             imageBlob,  // Aqui usamos o Blob da imagem
             'por',      // Idioma do OCR
-            {
-              logger: (m) => console.log(m), // Logs de progresso
-            }
           );
 
-          console.log("Texto extraído:", result.data.text);
+          alert("OCR capturado da imagem!");
           await updateDocumentOCR(documentId, result.data.text);
         }
       }

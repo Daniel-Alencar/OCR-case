@@ -1,7 +1,5 @@
 import React from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
-import logo from '../../public/assets/coep.png';
 
 function Welcome() {
   return (
@@ -18,7 +16,7 @@ function Welcome() {
                 Aplicação de caso de uso com OCR
               </p>
               <div className="flex space-x-5">
-                <Link href="/ConsultantRegisterInitialPage">
+                <Link href="/Register">
                   <button className="flex w-full items-center justify-center gap-2 rounded-2xl bg-secondary p-5 py-3 font-semibold text-white hover:bg-green-900">
                     Cadastro
                   </button>

@@ -52,7 +52,6 @@ export default function LoginButton() {
       }
     } catch (err) {
       setError('Erro ao conectar com o servidor.');
-      console.log(err);
     } finally {
       setLoading(false);
     }

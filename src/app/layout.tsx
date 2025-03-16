@@ -14,8 +14,8 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: 'Coep Vale',
-  description: 'conectando o agro',
+  title: 'OCR + LLM',
+  description: '',
 };
 
 export default function RootLayout({

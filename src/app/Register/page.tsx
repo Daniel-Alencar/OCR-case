@@ -1,7 +1,7 @@
-import FormRegister from '@/components/FormRegister/indexC';
+import FormRegister from '@/components/FormRegister';
 import SubHeader from '@/components/SubHeader';
 
-function ConsultantRegisterInitialPage() {
+function Register() {
   return (
     <>
       <div className='h-6'></div>
@@ -13,4 +13,4 @@ function ConsultantRegisterInitialPage() {
   );
 }
 
-export default ConsultantRegisterInitialPage;
+export default Register;

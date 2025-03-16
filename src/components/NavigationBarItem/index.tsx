@@ -4,7 +4,6 @@ import { StaticImageData } from 'next/image';
 import { getTokenPayload } from '@/lib/auth';
 
 import useAuth from '@/hooks/useAuth';
-import usePagePermissions from '@/hooks/usePagePermissions';
 import { useState } from 'react';
 
 interface NavigationBarItemProps {

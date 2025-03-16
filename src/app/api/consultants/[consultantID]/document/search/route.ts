@@ -24,8 +24,6 @@ export async function GET(
       },
     });
 
-    console.log(documents);
-
     return NextResponse.json({ success: true, documents }, { status: 200 });
   } catch (error) {
     console.error("Erro ao buscar documentos:", error);

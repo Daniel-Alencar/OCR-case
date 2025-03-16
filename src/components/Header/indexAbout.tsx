@@ -6,7 +6,6 @@ import {
   BellAlertIcon,
 } from '@heroicons/react/24/outline';
 import { useEffect, useState, useRef } from 'react';
-import NotificationPopUp from '../NotificationPopUp';
 import { getTokenPayload } from '@/lib/auth';
 
 function Header() {
@@ -86,14 +85,6 @@ function Header() {
         className="h-6 w-6 cursor-pointer text-white"
         onClick={handleLogout}
       />
-      {showNotifications && (
-        <NotificationPopUp
-          title="Notificações"
-          notifications={notifications}
-          ref={popupRef}
-          setShowPopUp={setShowNotifications}
-        />
-      )}
     </div>
   );
 }

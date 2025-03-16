@@ -1,7 +1,7 @@
 'use client';
 
 import useAuth from '@/hooks/useAuth';
-import Header from '@/components/Header/indexA';
+import Header from '@/components/Header/indexAbout';
 
 export default function About() {
   useAuth();

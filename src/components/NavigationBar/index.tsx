@@ -17,7 +17,6 @@ import NavigationBarItem from '../NavigationBarItem';
 import { getTokenPayload } from '@/lib/auth';
 
 import useAuth from '@/hooks/useAuth';
-import usePagePermissions from '@/hooks/usePagePermissions';
 
 const pagesInformations = [
   {

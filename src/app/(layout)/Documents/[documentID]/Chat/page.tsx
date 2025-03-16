@@ -46,7 +46,9 @@ const ChatPage = () => {
 
   useEffect(() => {
     getOCRTranscrition(parseInt(documentID)).then(() => {
-      if (initialMessage) sendMessage('', true); // Envia a mensagem inicial apenas se ela foi definida
+      // Envia a mensagem inicial apenas se ela foi definida
+      if (initialMessage) sendMessage('', true);
+
     });
   }, []);
 

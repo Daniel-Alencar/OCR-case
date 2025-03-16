@@ -8,7 +8,6 @@ import {
   BellAlertIcon
 } from '@heroicons/react/24/outline';
 import { useEffect, useState, useRef } from 'react';
-import NotificationPopUp from '../NotificationPopUp';
 import { getTokenPayload } from '@/lib/auth';
 
 interface HeaderProps {
@@ -79,15 +78,6 @@ function Header({ mode = true, title = '' }: HeaderProps) {
           </div>
         </div>
       </div>
-      {
-        showNotifications &&
-        <NotificationPopUp 
-          title='Notificações'
-          notifications={notifications}
-          ref={popupRef}
-          setShowPopUp={setShowNotifications}
-        />
-      }
     </>
   );
 }

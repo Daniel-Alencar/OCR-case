@@ -1,7 +1,5 @@
-import Image from 'next/image';
 import LoginButton from './LoginButton';
 
-import Logo from '../../public/assets/coep.png';
 import Link from 'next/link';
 
 export default function Login() {
