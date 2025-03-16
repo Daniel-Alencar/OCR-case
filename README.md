@@ -16,6 +16,15 @@ Entre na pasta do projeto:
 ```
 cd OCR-case
 ```
+
+É necessário preencher a variável de ambiente .env da aplicação com a API KEY da conta da Open AI. Isso é necessário para acessar os modelos LLM que a Open AI disponibiliza para seus usuários.
+
+Na variável .env adicione algo assim:
+
+```
+OPENAI_API_KEY="sua-chave-api-openai"
+```
+
 Instale as dependências
 
 ```
