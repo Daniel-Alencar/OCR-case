@@ -72,7 +72,10 @@ export async function POST(req: NextRequest) {
 
   } catch (error) {
     console.error("Erro no upload:", error);
-    return NextResponse.json({ error: "Erro interno no servidor" }, { status: 500 });
+    return NextResponse.json(
+      { error: `Erro interno no servidor: ${error}` }, 
+      { status: 500 }
+    );
   }
 }
 
@@ -113,9 +116,10 @@ export async function GET(req: NextRequest,
     }, { status: 200 });
   } catch (error) {
     console.error("Erro ao buscar documento:", error);
-    return NextResponse.json({
-      error: "Erro interno no servidor"
-    }, { status: 500 });
+    return NextResponse.json(
+      { error: `Erro interno no servidor: ${error}` }, 
+      { status: 500 }
+    );
   }
 }
 
@@ -163,7 +167,7 @@ export async function DELETE(req: NextRequest,
   } catch (error) {
     console.error("Erro ao deletar documento:", error);
     return NextResponse.json(
-      { error: "Erro interno no servidor" },
+      { error: `Erro interno no servidor: ${error}` }, 
       { status: 500 }
     );
   }

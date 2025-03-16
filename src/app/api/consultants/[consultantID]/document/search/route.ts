@@ -26,6 +26,9 @@ export async function GET(
     return NextResponse.json({ success: true, documents }, { status: 200 });
   } catch (error) {
     console.error("Erro ao buscar documentos:", error);
-    return NextResponse.json({ error: "Erro interno no servidor" }, { status: 500 });
+    return NextResponse.json(
+      { error: `Erro interno no servidor: ${error}` }, 
+      { status: 500 }
+    );
   }
 }
