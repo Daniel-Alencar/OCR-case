@@ -19,11 +19,11 @@ cd OCR-case
 
 É necessário preencher a variável de ambiente .env da aplicação com a API KEY da conta da Open AI. Isso é necessário para acessar os modelos LLM que a Open AI disponibiliza para seus usuários.
 
-Na variável .env adicione algo assim:
+Além disso, é necessário especificar a variável de ambiente para usar o Vercel Blob Storage.
 
-```
-OPENAI_API_KEY="sua-chave-api-openai"
-```
+Com a finalidade de facilitar, todas as variáveis de ambiente foram armazenadas no arquivo .env.zip. Essas variáveis só estão neste arquivo para fins de possibilitar testes locais com o repositório.
+
+Para que o projeto acesse essas variáveis, basta descompactar o arquivo .env.zip. Dentro dele contém as varíaveis de ambiente .env necessárias para rodar o projeto.
 
 Instale as dependências
 
