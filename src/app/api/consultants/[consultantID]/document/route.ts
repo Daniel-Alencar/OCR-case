@@ -4,14 +4,15 @@ import path from "path";
 import { PrismaClient } from "@prisma/client";
 import { writeFile, mkdir } from "fs/promises";
 import { existsSync } from "fs";
+import { put } from "@vercel/blob";
 
 const prisma = new PrismaClient();
 
 // Configuração do multer para armazenar arquivos na pasta "uploads"
 const upload = multer({
   storage: multer.memoryStorage(),
-  // Limite de 5MB
-  limits: { fileSize: 5 * 1024 * 1024 },
+  // Limite de 50MB
+  limits: { fileSize: 50 * 1024 * 1024 },
   fileFilter: (req, file, cb) => {
     const filetypes = /jpeg|jpg|png|gif/;
     const mimetype = filetypes.test(file.mimetype);
@@ -43,33 +44,28 @@ export async function POST(req: NextRequest) {
       }, { status: 400 });
     }
 
-    // Criar nome do arquivo único
+    // Criar nome de arquivo único
     const fileName = `${Date.now()}-${file.name.replace(/\s/g, "_")}`;
-    const uploadDir = path.join(process.cwd(), "public/uploads");
 
-    // Verificar se o diretório existe, caso contrário, criar
-    if (!existsSync(uploadDir)) {
-      await mkdir(uploadDir, { recursive: true });
-    }
-
-    const filePath = path.join(uploadDir, fileName);
-    
-    // Salvar arquivo localmente
+    // Fazer upload direto para o Vercel Blob Storage
     const buffer = Buffer.from(await file.arrayBuffer());
-    await writeFile(filePath, buffer);
-    
-    // Salvar no banco de dados
-    const document = await prisma.document.create({
-      data: {
-        name: file.name,
-        // Caminho do arquivo salvo
-        url: `/uploads/${fileName}`,
-        type: "image",
-        consultant: { connect: { id: Number(consultantId) } }
-      },
+    const blob = await put(fileName, buffer, {
+      // Deixa o arquivo acessível via URL pública
+      access: "public", 
     });
-    return NextResponse.json({ success: true, document }, { status: 201 });
 
+    // Salvar no banco de dados a URL do arquivo armazenado
+    const document = await prisma.document.create({
+        data: {
+          name: file.name,
+          // URL pública do arquivo armazenado no Vercel Blob
+          url: blob.url,
+          type: "image",
+          consultant: { connect: { id: Number(consultantId) } },
+        },
+    });
+
+    return NextResponse.json({ success: true, document }, { status: 201 });
   } catch (error) {
     console.error("Erro no upload:", error);
     return NextResponse.json(
