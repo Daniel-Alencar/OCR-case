@@ -1,24 +1,41 @@
-import { NextResponse } from 'next/server';
-import { OpenAI } from 'openai';
+import { NextResponse } from "next/server";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+const gemini_api_key = process.env.GEMINI_API_KEY;
+
+if (!gemini_api_key) {
+  throw new Error("A chave da API do Gemini não foi definida.");
+}
+
+// Inicializa a API do Gemini
+const googleAI = new GoogleGenerativeAI(gemini_api_key);
 
 export async function POST(req: Request) {
-  const { messages } = await req.json();
-
   try {
-    const completion = await openai.chat.completions.create({
-      model: 'gpt-3.5-turbo',
-      messages: messages,
-    });
+    const { messages } = await req.json();
 
-    return NextResponse.json({ message: completion.choices[0].message });
+    // Concatena todas as mensagens para formar um prompt adequado
+    const prompt = messages.map((msg: { content: string }) => msg.content).join("\n");
+
+    // Obtém o modelo Gemini correto
+    const model = googleAI.getGenerativeModel({ model: "gemini-1.5-flash-002" });
+
+    // Gera uma resposta baseada no prompt
+    const result = await model.generateContent(prompt);
+
+    // Extraindo a resposta do Gemini
+    const responseText = result.response.text();
+
+    return NextResponse.json({
+      message: {
+        role: "assistant",
+        content: responseText,
+      },
+    });
   } catch (error: any) {
-    console.error('Erro ao processar a mensagem:', error);
+    console.error("Erro ao processar a mensagem:", error);
     return NextResponse.json(
-      { error: error.message || 'Erro ao processar a mensagem' },
+      { error: error.message || "Erro ao processar a mensagem" },
       { status: 500 }
     );
   }
